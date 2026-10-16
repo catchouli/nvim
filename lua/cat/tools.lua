@@ -115,6 +115,10 @@ map('n', '<leader>gb', P('git_branches'), { desc = 'Git branches' })
 map('n', '<leader>go', function() MiniDiff.toggle_overlay(0) end, { desc = 'Show changes inline' })
 map('n', '<leader>gB', function() Snacks.gitbrowse() end, { desc = 'Open on GitHub' })
 -- ]h / [h jump between changed hunks; gh / gH apply / reset a hunk (mini.diff).
+-- Alt+j / Alt+k do the same as ]h / [h without reaching for the brackets (left Option is
+-- Alt in Ghostty).
+map({ 'n', 'x' }, '<M-j>', function() MiniDiff.goto_hunk('next') end, { desc = 'Next change' })
+map({ 'n', 'x' }, '<M-k>', function() MiniDiff.goto_hunk('prev') end, { desc = 'Previous change' })
 
 -- Reviewing changes (diffview): a tab with every changed file down the left and the
 -- selected one side by side. Staging a file (-) marks it reviewed; what's left unstaged
