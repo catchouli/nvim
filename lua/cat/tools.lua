@@ -196,6 +196,30 @@ require('claudecode').setup({
   },
 })
 map('n', '<leader>ac', '<Cmd>ClaudeCode<CR>', { desc = 'Toggle Claude' })
+-- Claude only redraws properly when its size changes, so after anything that leaves it
+-- half-drawn, nudge its window one column narrower and back. Happens by itself when you
+-- come back to a tab (e.g. closing the review); ,al does it by hand, and also scrolls
+-- back to the bottom. Applies to every terminal window in the tab.
+local function redraw_terminals(to_bottom)
+  local found = false
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local width = vim.api.nvim_win_get_width(win)
+    if vim.bo[buf].buftype == 'terminal' and width > 1 then
+      found = true
+      if to_bottom then vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(buf), 0 }) end
+      vim.api.nvim_win_set_width(win, width - 1)
+      vim.defer_fn(function()
+        if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_set_width(win, width) end
+      end, 50)
+    end
+  end
+  return found
+end
+vim.api.nvim_create_autocmd('TabEnter', { callback = function() redraw_terminals(false) end })
+map('n', '<leader>al', function()
+  if not redraw_terminals(true) then vim.notify('Claude is not open in this tab (,ac opens it)') end
+end, { desc = 'Fix Claude\'s layout (redraw)' })
 map('n', '<leader>af', '<Cmd>ClaudeCodeFocus<CR>', { desc = 'Focus Claude' })
 map('n', '<leader>ar', '<Cmd>ClaudeCode --resume<CR>', { desc = 'Resume a Claude session' })
 map('n', '<leader>ab', '<Cmd>ClaudeCodeAdd %<CR>', { desc = 'Add this file to Claude' })
