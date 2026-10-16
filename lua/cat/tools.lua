@@ -118,12 +118,18 @@ map('n', '<leader>gB', function() Snacks.gitbrowse() end, { desc = 'Open on GitH
 
 -- Reviewing changes (diffview): a tab with every changed file down the left and the
 -- selected one side by side. Staging a file (-) marks it reviewed; what's left unstaged
--- is what's still to read. g? lists the keys.
-require('diffview').setup({ enhanced_diff_hl = true })
+-- is what's still to read. g? lists the keys. cc commits what's staged (mini.git opens
+-- the message in a tab: :wq commits, :q! cancels).
+local commit = { 'n', 'cc', '<Cmd>Git commit<CR>', { desc = 'Commit the staged changes' } }
+require('diffview').setup({
+  enhanced_diff_hl = true,
+  keymaps = { file_panel = { commit } }, -- the file list only: in the diffs cc still edits
+})
 map('n', '<leader>gv', function()
   if require('diffview.lib').get_current_view() then vim.cmd('DiffviewClose') else vim.cmd('DiffviewOpen') end
 end, { desc = 'Review changes (toggle)' })
 map('n', '<leader>gq', '<Cmd>DiffviewClose<CR>', { desc = 'Close the review' })
+map('n', '<leader>gc', '<Cmd>Git commit<CR>', { desc = 'Commit the staged changes' })
 map('n', '<leader>gh', '<Cmd>DiffviewFileHistory %<CR>', { desc = 'History of this file, side by side' })
 map('n', '<leader>gH', '<Cmd>DiffviewFileHistory<CR>', { desc = 'History of the repo, side by side' })
 
