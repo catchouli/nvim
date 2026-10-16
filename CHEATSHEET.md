@@ -83,7 +83,7 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 
 | Key | Does |
 |---|---|
-| sign column | changed lines; `]h`/`[h` next/previous change; `ghgh` stages the change under the cursor, `gHgh` undoes it (`gh`/`gH` also work on a selection) |
+| sign column | changed lines; `Alt+j`/`Alt+k` (or `]h`/`[h`) next/previous change; `ghgh` stages the change under the cursor, `gHgh` undoes it (`gh`/`gH` also work on a selection) |
 | `,gv` | **review changes**: every changed file down the left, the selected one side by side (`,gv` again or `,gq` closes) |
 | in the review | `Tab`/`S-Tab` next/previous file, `-` stage or unstage a file, `S` stage all, `U` unstage all, `X` throw away a file's changes, `cc` (in the file list) or `,gc` commit, `g?` all keys |
 | `,gc` | commit what's staged: the message opens in a tab; `:wq` commits, `:q!` cancels |
