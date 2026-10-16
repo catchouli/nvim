@@ -1,0 +1,20 @@
+# Ghostty settings to go with the Neovim config. install.sh links this to
+# ~/.config/ghostty/config. Reload in Ghostty with Cmd+Shift+, after editing.
+# All options: `ghostty +show-config --default --docs`
+
+# Same palette as Neovim's colour scheme.
+theme = Catppuccin Mocha
+
+# Ghostty's built-in font is JetBrains Mono with the Nerd Font icons included,
+# so the icons in Neovim work without installing anything.
+font-size = 14
+window-padding-x = 8
+window-padding-y = 6
+window-save-state = always
+
+# Left Option works as Alt in terminal programs (Neovim's <M-...> keys); right
+# Option still types special characters like £ and €.
+macos-option-as-alt = left
+
+# Copy on select, like most Linux terminals.
+copy-on-select = clipboard
