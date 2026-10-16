@@ -3,8 +3,9 @@
 -- it appears after about a second, and you edit it or :wq as usual. Typing before it
 -- arrives keeps your text. ,gm in the message writes a new one.
 --
--- Only for repos that are safe to send to cloud AI: on when the origin remote is on
--- github.com/catchouli, off everywhere else (work code must never be sent). Per repo:
+-- Only for repos that are safe to send to cloud AI: on when the origin remote belongs to
+-- one of the GitHub accounts in OWNERS below, off everywhere else (so work code is never
+-- sent). Using this config yourself? Put your own GitHub name in OWNERS. Per repo:
 --   git config cat.aicommit true    allow it
 --   git config cat.aicommit false   never
 --
@@ -12,6 +13,9 @@
 -- prompt, so each message costs about as much as the diff itself (big diffs are cut).
 
 local M = {}
+
+-- GitHub accounts whose repos get AI commit messages without asking.
+local OWNERS = { 'catchouli' }
 
 local MAX_DIFF = 16000 -- characters of diff sent; about 4k tokens
 local SYSTEM = [[You write git commit messages. Reply with only the message, nothing else: a summary
@@ -32,8 +36,10 @@ local function allowed(gitdir)
   local setting = vim.trim(git(gitdir, { 'config', '--bool', 'cat.aicommit' }) or '')
   if setting == 'true' then return true end
   if setting == 'false' then return false, 'cat.aicommit is false in this repo' end
-  local url = git(gitdir, { 'remote', 'get-url', 'origin' }) or ''
-  if url:lower():match('github%.com[:/]catchouli/') then return true end
+  local url = (git(gitdir, { 'remote', 'get-url', 'origin' }) or ''):lower()
+  for _, owner in ipairs(OWNERS) do
+    if url:find('github%.com[:/]' .. vim.pesc(owner:lower()) .. '/') then return true end
+  end
   return false, "this repo isn't one of yours on GitHub (to allow it: git config cat.aicommit true)"
 end
 
