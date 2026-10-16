@@ -50,7 +50,7 @@ In any picker: type to filter, `<C-j>`/`<C-k>` to move, Enter to open, `<C-v>`/`
 |---|---|
 | `K` | docs for the thing under the cursor |
 | `gd` / `gy` | go to definition / type definition |
-| `grr` / `gri` | references / implementations |
+| `grr` / `gri` | references / implementations, in a picker with a preview |
 | `grn` / `gra` | rename / code actions (fixes, imports...) |
 | `[d` / `]d`, `,e` | previous / next problem; show the problem under the cursor |
 | `,f` / `,F` | format now / toggle format-on-save (on for Rust and Python) |
