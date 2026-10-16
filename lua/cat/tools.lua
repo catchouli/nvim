@@ -136,7 +136,17 @@ map({ 'n', 'x' }, '<M-k>', function() MiniDiff.goto_hunk('prev') end, { desc = '
 local commit = { 'n', 'cc', '<Cmd>Git commit<CR>', { desc = 'Commit the staged changes' } }
 require('diffview').setup({
   enhanced_diff_hl = true,
-  keymaps = { file_panel = { commit } }, -- the file list only: in the diffs cc still edits
+  -- In the file and history lists: cc commits (not in the diffs, where cc still edits),
+  -- Ctrl-J / Ctrl-K scroll the diff without leaving the list (Ctrl-F / Ctrl-B jump further).
+  -- Fractions of the window: diffview's scroll breaks on a whole number of lines upwards.
+  keymaps = (function()
+    local actions = require('diffview.actions')
+    local scroll = {
+      { 'n', '<C-j>', actions.scroll_view(0.1), { desc = 'Scroll the diff down' } },
+      { 'n', '<C-k>', actions.scroll_view(-0.1), { desc = 'Scroll the diff up' } },
+    }
+    return { file_panel = { commit, unpack(scroll) }, file_history_panel = scroll }
+  end)(),
 })
 map('n', '<leader>gv', function()
   if require('diffview.lib').get_current_view() then vim.cmd('DiffviewClose') else vim.cmd('DiffviewOpen') end

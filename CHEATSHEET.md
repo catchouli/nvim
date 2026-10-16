@@ -86,6 +86,7 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | sign column | changed lines; `Alt+j`/`Alt+k` (or `]h`/`[h`) next/previous change; `ghgh` stages the change under the cursor, `gHgh` undoes it (`gh`/`gH` also work on a selection) |
 | `,gv` | **review changes**: every changed file down the left, the selected one side by side (`,gv` again or `,gq` closes) |
 | in the review | `Tab`/`S-Tab` next/previous file, `-` stage or unstage a file, `S` stage all, `U` unstage all, `X` throw away a file's changes, `cc` (in the file list) or `,gc` commit, `g?` all keys |
+| in the file list | `Ctrl-J`/`Ctrl-K` scroll the diff without leaving the list (`Ctrl-F`/`Ctrl-B` scroll further); `gf` opens the file in your normal tab |
 | `,gc` | commit what's staged: the message opens in a tab, and in your own repos Claude fills it in after a second or two; tweak it, then `:wq` commits, `:q!` cancels |
 | `,gm` | in a commit message: have Claude write a new one |
 | `,gh` / `,gH` | history of this file / of the repo, each commit side by side |
