@@ -86,7 +86,8 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | sign column | changed lines; `Alt+j`/`Alt+k` (or `]h`/`[h`) next/previous change; `ghgh` stages the change under the cursor, `gHgh` undoes it (`gh`/`gH` also work on a selection) |
 | `,gv` | **review changes**: every changed file down the left, the selected one side by side (`,gv` again or `,gq` closes) |
 | in the review | `Tab`/`S-Tab` next/previous file, `-` stage or unstage a file, `S` stage all, `U` unstage all, `X` throw away a file's changes, `cc` (in the file list) or `,gc` commit, `g?` all keys |
-| `,gc` | commit what's staged: the message opens in a tab; `:wq` commits, `:q!` cancels |
+| `,gc` | commit what's staged: the message opens in a tab, and in your own repos Claude fills it in after a second or two; tweak it, then `:wq` commits, `:q!` cancels |
+| `,gm` | in a commit message: have Claude write a new one |
 | `,gh` / `,gH` | history of this file / of the repo, each commit side by side |
 | `,go` | show the changes inline, with the old text |
 | `,gs` / `,gd` / `,gb` | git status / changed hunks / branches |
@@ -96,7 +97,9 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | `,gp` / `,gP` | GitHub pull requests: open / all |
 | `,gi` / `,gI` | GitHub issues: open / all |
 
-Reviewing a lot of AI-written changes: open `,gv`, go file by file, and stage each file (`-`) or change once you're happy with it. For a single change, use `ghgh` in the right-hand pane of an unstaged file: that pane is the real file, while the left-hand pane and staged files are read-only copies where `ghgh` doesn't work. Whatever's still unstaged is what's left to read, and anything the agent changes afterwards shows up unstaged again. Commit with `,gc` (or `cc` in the file list) when you're done.
+Reviewing a lot of AI-written changes: open `,gv`, go file by file, and stage each file (`-`) or change once you're happy with it. For a single change, use `ghgh` in the right-hand pane of an unstaged file: that pane is the real file, while the left-hand pane and staged files are read-only copies where `ghgh` doesn't work. Whatever's still unstaged is what's left to read, and anything the agent changes afterwards shows up unstaged again. Commit with `,gc` (or `cc` in the file list) when you're done; Claude drafts the message for you to tweak.
+
+AI commit messages only happen in repos whose `origin` is on github.com/catchouli, so work code is never sent. To allow another repo: `git config cat.aicommit true`; to turn it off in one: `git config cat.aicommit false`. Each message uses Claude Haiku with no tools, and costs about as many tokens as the diff (big diffs are cut to about 4k tokens).
 
 On a PR or issue, Enter shows the actions: view the diff, comment, review (approve or request changes), check out the branch, merge, open in the browser. It uses your `gh` login.
 

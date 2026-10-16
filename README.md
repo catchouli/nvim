@@ -39,6 +39,7 @@ ruff, tree-sitter and lua-language-server come as prebuilt binaries rather than 
 | `lua/cat/editing.lua` | text objects, surround, jumps, key hints, syntax trees |
 | `lua/cat/languages.lua` | languages to install syntax parsers for |
 | `lua/cat/lsp.lua` | language servers, completion, formatting |
+| `lua/cat/commitmsg.lua` | Claude drafts commit messages (only in your own repos; see the top of the file) |
 | `lua/cat/tools.lua` | finder, start screen, folders, git, GitHub, tests, Claude Code |
 | `after/ftplugin/rust.lua` | Rust-only keys |
 | `ghostty/config` | the terminal's settings |

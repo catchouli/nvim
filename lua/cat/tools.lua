@@ -107,6 +107,7 @@ map('n', '-', '<Cmd>Oil<CR>', { desc = "Open this file's folder" })
 -- Git: changed lines in the sign column, :Git for any git command.
 require('mini.diff').setup()
 require('mini.git').setup()
+require('cat.commitmsg').setup() -- Claude writes the message when a commit opens
 map('n', '<leader>gs', P('git_status'), { desc = 'Git status' })
 map('n', '<leader>gd', P('git_diff'), { desc = 'Git diff (changed hunks)' })
 map('n', '<leader>gl', P('git_log_file'), { desc = 'Git log of this file' })
