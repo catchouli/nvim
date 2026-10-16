@@ -5,6 +5,8 @@
 <a href="docs/screenshots/3-review.png"><img src="docs/screenshots/thumbs/3-review.jpg" width="49%" alt="The review screen: every changed file, each diff side by side"></a>
 <a href="docs/screenshots/4-commit.png"><img src="docs/screenshots/thumbs/4-commit.jpg" width="49%" alt="A commit message drafted by Claude from the staged changes"></a>
 
+<sub>The demo is a C program shaped like an egg that prints an egg. Claude laid it, I reviewed it, Claude wrote the commit message. Nobody can say it isn't eggs-actly what I asked for. 🥚</sub>
+
 I made this Neovim config with Claude because I needed one tool where I could write, review and commit code with Claude. Before, it was random terminal windows with random Claude sessions, next to a pretty much vanilla Neovim. Now it's all in one place:
 
 - **Claude, built in.** Claude Code runs in a split next to your code (`,ac`). It sees the file you're in and what you've selected, and its edits arrive as diffs to accept or reject. `Ctrl-h` / `Ctrl-l` hop between it and your code.
