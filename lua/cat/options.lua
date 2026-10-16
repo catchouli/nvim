@@ -2,7 +2,7 @@ local o = vim.opt
 
 o.number = true
 o.relativenumber = true
-o.signcolumn = 'yes' -- stops text jumping when diagnostics or git signs appear
+o.signcolumn = 'yes:2' -- room for a diagnostic and a git bar; fixed so text doesn't jump
 o.cursorline = true
 o.wrap = true
 o.linebreak = true
