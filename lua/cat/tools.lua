@@ -113,7 +113,32 @@ require('oil').setup({
 map('n', '-', '<Cmd>Oil<CR>', { desc = "Open this file's folder" })
 
 -- Git: changed lines in the sign column, :Git for any git command.
-require('mini.diff').setup()
+-- Changed lines get a coloured bar in the sign column: green added, yellow changed, red
+-- where lines were deleted.
+require('mini.diff').setup({
+  view = { style = 'sign', signs = { add = '▎', change = '▎', delete = '▁' } },
+})
+-- mini.diff draws either the bars or coloured line numbers, so colour the numbers here
+-- too, in the same colours, whenever its diff updates.
+local numbers_ns = vim.api.nvim_create_namespace('cat.diffnumbers')
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'MiniDiffUpdated',
+  callback = function(ev)
+    vim.api.nvim_buf_clear_namespace(ev.buf, numbers_ns, 0, -1)
+    local data = MiniDiff.get_buf_data(ev.buf)
+    if not data then return end
+    local last = vim.api.nvim_buf_line_count(ev.buf)
+    local hl = { add = 'MiniDiffSignAdd', change = 'MiniDiffSignChange', delete = 'MiniDiffSignDelete' }
+    for _, h in ipairs(data.hunks or {}) do
+      -- A deletion has no lines of its own: mark the line it happened after.
+      local from = math.max(h.buf_start, 1)
+      local to = h.type == 'delete' and from or h.buf_start + h.buf_count - 1
+      for l = from, math.min(to, last) do
+        vim.api.nvim_buf_set_extmark(ev.buf, numbers_ns, l - 1, 0, { number_hl_group = hl[h.type], priority = 199 })
+      end
+    end
+  end,
+})
 require('mini.git').setup()
 require('cat.commitmsg').setup() -- Claude writes the message when a commit opens
 map('n', '<leader>gs', P('git_status'), { desc = 'Git status' })
