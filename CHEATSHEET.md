@@ -8,7 +8,7 @@ Leader is `,`. **Press `,` (or `g`, `z`, `[`, `]`, `<C-w>`, `"`) and wait: a pop
 
 | Key | Does |
 |---|---|
-| `<C-p>` | find a file (recent files first, then the project) |
+| `<C-p>` | find a file in the current folder (open and recent ones first) |
 | `,p` / `,o` / `,b` | project files / recent files / open buffers |
 | `,/` | search text in the project (ripgrep) |
 | `,*` | search for the word under the cursor (or the selection) |
