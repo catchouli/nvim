@@ -3,7 +3,15 @@ local map = vim.keymap.set
 
 -- snacks.nvim: fuzzy finder, start screen, notifications, indent guides, GitHub.
 require('snacks').setup({
-  picker = { enabled = true },
+  picker = {
+    enabled = true,
+    sources = {
+      -- Ctrl-P: open buffers, then recent files and all files, but only from this folder
+      -- (recent files are otherwise Neovim's whole history, from every project).
+      -- ,o still shows recent files from everywhere.
+      smart = { multi = { 'buffers', { source = 'recent', filter = { cwd = true } }, 'files' } },
+    },
+  },
   dashboard = { -- start screen when you run nvim with no file
     enabled = true,
     preset = {
