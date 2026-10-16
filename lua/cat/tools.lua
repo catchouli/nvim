@@ -188,7 +188,11 @@ require('claudecode').setup({
     -- Esc and Esc Esc go to Claude (stop it / go back to an earlier message) instead of
     -- leaving terminal mode. Ctrl-h jumps back to your file; Ctrl-\ Ctrl-n leaves
     -- terminal mode without moving.
-    snacks_win_opts = { keys = { term_normal = false, claude_esc = { '<Esc>', '<Esc>', mode = 't', desc = 'Esc to Claude' } } },
+    -- (Snacks treats a plain '<Esc>' here as one of its own actions, so send the byte.)
+    snacks_win_opts = { keys = {
+      term_normal = false,
+      claude_esc = { '<Esc>', function() vim.api.nvim_chan_send(vim.b.terminal_job_id, '\27') end, mode = 't', desc = 'Esc to Claude' },
+    } },
   },
 })
 map('n', '<leader>ac', '<Cmd>ClaudeCode<CR>', { desc = 'Toggle Claude' })
