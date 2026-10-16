@@ -33,6 +33,24 @@ map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Errors in location li
 map('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Leave terminal mode' })
 map('t', '<C-h>', [[<C-\><C-n><C-w>h]], { desc = 'Window left' })
 map('t', '<C-l>', [[<C-\><C-n><C-w>l]], { desc = 'Window right' })
+
+-- Coming back to a tab (e.g. closing the review), terminals in it can be left half-drawn:
+-- Claude only redraws properly when its size changes. Nudge each terminal window one
+-- column narrower and back, which makes it redraw.
+vim.api.nvim_create_autocmd('TabEnter', {
+  callback = function()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local width = vim.api.nvim_win_get_width(win)
+      if vim.bo[buf].buftype == 'terminal' and width > 1 then
+        vim.api.nvim_win_set_width(win, width - 1)
+        vim.defer_fn(function()
+          if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_set_width(win, width) end
+        end, 50)
+      end
+    end
+  end,
+})
 vim.api.nvim_create_autocmd('TermOpen', {
   callback = function()
     vim.opt_local.number = false
