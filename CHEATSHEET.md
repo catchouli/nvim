@@ -85,7 +85,8 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 |---|---|
 | sign column | changed lines; `]h`/`[h` next/previous change; `ghgh` stages the change under the cursor, `gHgh` undoes it (`gh`/`gH` also work on a selection) |
 | `,gv` | **review changes**: every changed file down the left, the selected one side by side (`,gv` again or `,gq` closes) |
-| in the review | `Tab`/`S-Tab` next/previous file, `-` stage or unstage a file, `S` stage all, `U` unstage all, `X` throw away a file's changes, `g?` all keys |
+| in the review | `Tab`/`S-Tab` next/previous file, `-` stage or unstage a file, `S` stage all, `U` unstage all, `X` throw away a file's changes, `cc` (in the file list) or `,gc` commit, `g?` all keys |
+| `,gc` | commit what's staged: the message opens in a tab; `:wq` commits, `:q!` cancels |
 | `,gh` / `,gH` | history of this file / of the repo, each commit side by side |
 | `,go` | show the changes inline, with the old text |
 | `,gs` / `,gd` / `,gb` | git status / changed hunks / branches |
@@ -95,7 +96,7 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | `,gp` / `,gP` | GitHub pull requests: open / all |
 | `,gi` / `,gI` | GitHub issues: open / all |
 
-Reviewing a lot of AI-written changes: open `,gv`, go file by file, and stage each file (`-`) or change (`ghgh` in the file) once you're happy with it. Whatever's still unstaged is what's left to read, and anything the agent changes afterwards shows up unstaged again. Commit when the unstaged side is empty.
+Reviewing a lot of AI-written changes: open `,gv`, go file by file, and stage each file (`-`) or change once you're happy with it. For a single change, use `ghgh` in the right-hand pane of an unstaged file: that pane is the real file, while the left-hand pane and staged files are read-only copies where `ghgh` doesn't work. Whatever's still unstaged is what's left to read, and anything the agent changes afterwards shows up unstaged again. Commit with `,gc` (or `cc` in the file list) when you're done.
 
 On a PR or issue, Enter shows the actions: view the diff, comment, review (approve or request changes), check out the branch, merge, open in the browser. It uses your `gh` login.
 
