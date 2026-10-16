@@ -62,6 +62,16 @@ clue.setup({
   },
   window = { delay = 300, config = { width = 'auto' } },
 })
+-- mini.clue only adds the popup to listed buffers when they're first shown, so folders
+-- (oil), the review (diffview) and commit messages missed out, and plugins that add their
+-- own <leader> keys later (diffview does) could knock it out. Re-attach it whenever the
+-- buffer or window changes.
+vim.api.nvim_create_autocmd({ 'BufWinEnter', 'WinEnter', 'FileType' }, {
+  callback = vim.schedule_wrap(function()
+    local buf = vim.api.nvim_get_current_buf()
+    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype ~= 'terminal' then clue.ensure_buf_triggers(buf) end
+  end),
+})
 
 -- Syntax trees: highlighting and folds. The language list is in languages.lua.
 local langs = require('cat.languages')
