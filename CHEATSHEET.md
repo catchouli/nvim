@@ -109,6 +109,7 @@ On a PR or issue, Enter shows the actions: view the diff, comment, review (appro
 |---|---|
 | `,ac` | open or close Claude in a split on the right |
 | `,af` / `,ar` | jump to Claude / resume an earlier session |
+| `,al` | Claude's split looks messed up or scrolled? Redraw it and scroll to the bottom |
 | in Claude | `<C-h>` back to your file, `<C-l>` back into Claude (ready to type); `Esc` / `Esc Esc` go to Claude (stop it / go back to an earlier message); `<C-\><C-n>` leaves typing mode without moving |
 | `,ab` | add this file to the conversation |
 | `,as` (visual) | send the selection |
