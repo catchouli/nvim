@@ -183,7 +183,13 @@ require('crates').setup({ lsp = { enabled = true, actions = true, completion = t
 -- selection, and its edits arrive as diffs here to accept or reject.
 -- Already running claude in another terminal? Type /ide in it to connect to this Neovim.
 require('claudecode').setup({
-  terminal = { split_side = 'right', split_width_percentage = 0.4, provider = 'snacks' },
+  terminal = {
+    split_side = 'right', split_width_percentage = 0.4, provider = 'snacks',
+    -- Esc and Esc Esc go to Claude (stop it / go back to an earlier message) instead of
+    -- leaving terminal mode. Ctrl-h jumps back to your file; Ctrl-\ Ctrl-n leaves
+    -- terminal mode without moving.
+    snacks_win_opts = { keys = { term_normal = false, claude_esc = { '<Esc>', '<Esc>', mode = 't', desc = 'Esc to Claude' } } },
+  },
 })
 map('n', '<leader>ac', '<Cmd>ClaudeCode<CR>', { desc = 'Toggle Claude' })
 map('n', '<leader>af', '<Cmd>ClaudeCodeFocus<CR>', { desc = 'Focus Claude' })

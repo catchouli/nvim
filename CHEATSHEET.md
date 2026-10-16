@@ -41,7 +41,7 @@ In any picker: type to filter, `<C-j>`/`<C-k>` to move, Enter to open, `<C-v>`/`
 | `gc` / `gcc` | comment a selection / line (built into Neovim) |
 | `J` / `K` in visual mode | move the selected lines down / up |
 | `,y` | yank to the system clipboard (`<S-Insert>` pastes in insert mode) |
-| `<C-h/j/k/l>` | move between windows |
+| `<C-h/j/k/l>` | move between windows (`<C-h>`/`<C-l>` also work from inside a terminal or Claude) |
 | `<CR>` | clear search highlight |
 
 **Code (any language with a server)**
@@ -109,13 +109,14 @@ On a PR or issue, Enter shows the actions: view the diff, comment, review (appro
 |---|---|
 | `,ac` | open or close Claude in a split on the right |
 | `,af` / `,ar` | jump to Claude / resume an earlier session |
+| in Claude | `<C-h>` back to your file, `<C-l>` back into Claude (ready to type); `Esc` / `Esc Esc` go to Claude (stop it / go back to an earlier message); `<C-\><C-n>` leaves typing mode without moving |
 | `,ab` | add this file to the conversation |
 | `,as` (visual) | send the selection |
 | `,aa` / `,ad` | accept / reject the change Claude proposed (shown as a diff) |
 
 Claude sees which file you're in and what you've selected. Already running `claude` in another terminal? Type `/ide` there to connect it to this Neovim.
 
-**Terminal**: `:terminal`, and `<Esc>` gets back to normal mode.
+**Terminal**: `:terminal`, and `<Esc>` gets back to normal mode (except in Claude's split, see above).
 
 **Start screen**: `,m` or `:Home` to get back to it; `f` `g` `r` `n` `p` `c` `u` `q` as listed on it; `?` for this sheet.
 
