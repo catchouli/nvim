@@ -5,6 +5,7 @@
 --   grt type definition · gO symbols in file · <C-s> signature help (insert mode)
 --   [d / ]d previous/next problem · <C-w>d problem under cursor in a float
 -- Added here: gd definition · gy type definition · <leader>f format · <leader>i inlay hints
+-- Changed here: grr / gri open a picker with a preview instead of the quickfix list
 
 -- Completion menu. Tab/Shift-Tab move through it and Enter accepts (like the old coc setup);
 -- <C-space> opens it by hand, <C-e> closes it.
@@ -86,6 +87,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     map('gd', vim.lsp.buf.definition, 'Go to definition')
     map('gy', vim.lsp.buf.type_definition, 'Go to type definition')
+    -- In a picker with a preview, instead of the quickfix list.
+    map('grr', function() Snacks.picker.lsp_references() end, 'References')
+    map('gri', function() Snacks.picker.lsp_implementations() end, 'Implementations')
     map('<leader>f', function() vim.lsp.buf.format({ async = true }) end, 'Format file')
     map('<leader>i', function()
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
