@@ -7,7 +7,7 @@ It uses Neovim's built-in plugin manager (`vim.pack`) and built-in LSP client, s
 ## Set up on a new machine
 
 ```sh
-git clone <this folder> ~/projects/cat     # or copy the nvim/ folder anywhere
+git clone git@github.com:catchouli/nvim.git ~/projects/cat/nvim   # private repo; any folder works
 ~/projects/cat/nvim/install.sh
 ```
 
