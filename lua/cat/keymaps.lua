@@ -27,8 +27,12 @@ map('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move lines up' })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show error under cursor' })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Errors in location list' })
 
--- Terminal: Esc gets back to normal mode (old vimrc); no line numbers in terminals.
+-- Terminal: Esc gets back to normal mode (old vimrc; except in Claude's split, where Esc
+-- goes to Claude); no line numbers in terminals. Ctrl-h / Ctrl-l move to the window on
+-- the left / right straight from a terminal, e.g. from Claude back to your file.
 map('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Leave terminal mode' })
+map('t', '<C-h>', [[<C-\><C-n><C-w>h]], { desc = 'Window left' })
+map('t', '<C-l>', [[<C-\><C-n><C-w>l]], { desc = 'Window right' })
 vim.api.nvim_create_autocmd('TermOpen', {
   callback = function()
     vim.opt_local.number = false
