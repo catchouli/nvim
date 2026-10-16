@@ -100,7 +100,7 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 
 Reviewing a lot of AI-written changes: open `,gv`, go file by file, and stage each file (`-`) or change once you're happy with it. For a single change, use `ghgh` in the right-hand pane of an unstaged file: that pane is the real file, while the left-hand pane and staged files are read-only copies where `ghgh` doesn't work. Whatever's still unstaged is what's left to read, and anything the agent changes afterwards shows up unstaged again. Commit with `,gc` (or `cc` in the file list) when you're done; Claude drafts the message for you to tweak.
 
-AI commit messages only happen in repos whose `origin` is on github.com/catchouli, so work code is never sent. To allow another repo: `git config cat.aicommit true`; to turn it off in one: `git config cat.aicommit false`. Each message uses Claude Haiku with no tools, and costs about as many tokens as the diff (big diffs are cut to about 4k tokens).
+AI commit messages only happen in repos whose `origin` is on one of your GitHub accounts (`OWNERS` at the top of `lua/cat/commitmsg.lua`), so work code is never sent. To allow another repo: `git config cat.aicommit true`; to turn it off in one: `git config cat.aicommit false`. Each message uses Claude Haiku with no tools, and costs about as many tokens as the diff (big diffs are cut to about 4k tokens).
 
 On a PR or issue, Enter shows the actions: view the diff, comment, review (approve or request changes), check out the branch, merge, open in the browser. It uses your `gh` login.
 
