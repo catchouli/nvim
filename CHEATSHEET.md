@@ -92,6 +92,7 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | `,gh` / `,gH` | history of this file / of the repo, each commit side by side |
 | `,go` | show the changes inline, with the old text |
 | `,gs` / `,gd` / `,gb` | git status / changed hunks / branches |
+| `,gu` | pull the current branch (e.g. `,gb` to `main` after a PR is merged, then `,gu`) |
 | `,gl` / `,gL` | history of this file / of the repo |
 | `,gB` | open this file on GitHub |
 | `:Git …` | any git command, output in a split |

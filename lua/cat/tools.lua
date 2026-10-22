@@ -146,6 +146,16 @@ map('n', '<leader>gd', P('git_diff'), { desc = 'Git diff (changed hunks)' })
 map('n', '<leader>gl', P('git_log_file'), { desc = 'Git log of this file' })
 map('n', '<leader>gL', P('git_log'), { desc = 'Git log' })
 map('n', '<leader>gb', P('git_branches'), { desc = 'Git branches' })
+-- Pull the current branch, e.g. after ,gb to main once a PR is merged.
+map('n', '<leader>gu', function()
+  vim.notify('Pulling…', vim.log.levels.INFO, { id = 'git_pull', title = 'Git pull' })
+  vim.system({ 'git', 'pull' }, { text = true }, vim.schedule_wrap(function(r)
+    local out = vim.trim((r.stdout or '') .. '\n' .. (r.stderr or ''))
+    local level = r.code == 0 and vim.log.levels.INFO or vim.log.levels.ERROR
+    vim.notify(out, level, { id = 'git_pull', title = 'Git pull' })
+    vim.cmd.checktime() -- reload open files that the pull changed
+  end))
+end, { desc = 'Git pull' })
 map('n', '<leader>go', function() MiniDiff.toggle_overlay(0) end, { desc = 'Show changes inline' })
 map('n', '<leader>gB', function() Snacks.gitbrowse() end, { desc = 'Open on GitHub' })
 -- ]h / [h jump between changed hunks; gh / gH apply / reset a hunk (mini.diff).
