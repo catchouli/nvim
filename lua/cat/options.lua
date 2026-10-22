@@ -39,8 +39,8 @@ o.foldlevelstart = 99
 
 vim.diagnostic.config({
   severity_sort = true,
-  float = { border = 'rounded', source = 'if_many' },
-  virtual_text = { spacing = 2, source = 'if_many' },
+  float = { border = 'rounded', source = 'if_many', anchor_bias = 'above' },
+  virtual_text = false, -- shown in a float instead, see below
   signs = vim.g.fancy and {
     text = {
       [vim.diagnostic.severity.ERROR] = '󰅚 ',
@@ -49,6 +49,17 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.HINT] = '󰌶 ',
     },
   } or true,
+})
+
+-- When the cursor rests on a problem, show it in a float above the line.
+-- Skipped if another float (hover, completion docs) is already open.
+vim.api.nvim_create_autocmd('CursorHold', {
+  callback = function()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if vim.api.nvim_win_get_config(win).relative ~= '' then return end
+    end
+    vim.diagnostic.open_float({ scope = 'cursor', focus = false })
+  end,
 })
 
 -- Briefly highlight what was just yanked.
