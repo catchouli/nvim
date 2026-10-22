@@ -103,7 +103,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Ruff only lints and formats; leave hover to basedpyright.
     if client.name == 'ruff' then client.server_capabilities.hoverProvider = false end
 
-    if client:supports_method('textDocument/inlayHint') then
+    -- Python starts with them off: they look too much like real annotations. <leader>i shows them.
+    if client:supports_method('textDocument/inlayHint') and vim.bo[ev.buf].filetype ~= 'python' then
       vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
     end
   end,

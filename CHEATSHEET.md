@@ -54,7 +54,7 @@ In any picker: type to filter, `<C-j>`/`<C-k>` to move, Enter to open, `<C-v>`/`
 | `grn` / `gra` | rename / code actions (fixes, imports...) |
 | `[d` / `]d`, `,e` | previous / next problem; show the problem under the cursor |
 | `,f` / `,F` | format now / toggle format-on-save (on for Rust and Python) |
-| `,i` | toggle inlay hints (types shown inline) |
+| `,i` | toggle inlay hints (types shown inline; off at first in Python) |
 | `]]` / `[[` | next / previous use of the word under the cursor |
 | Insert mode | completion pops up as you type: `<Tab>`/`<S-Tab>` choose, Enter accepts, `<C-space>` opens it, `<C-e>` closes, `<C-s>` signature help |
 
