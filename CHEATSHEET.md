@@ -88,7 +88,7 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | in the review | `Tab`/`S-Tab` next/previous file, `-` stage or unstage a file, `S` stage all, `U` unstage all, `X` throw away a file's changes, `cc` (in the file list) or `,gc` commit, `g?` all keys |
 | in the file list | `Ctrl-J`/`Ctrl-K` scroll the diff without leaving the list (`Ctrl-F`/`Ctrl-B` scroll further); `gf` opens the file in your normal tab |
 | `,gc` | commit what's staged: the message opens in a tab, and in your own repos Claude fills it in after a second or two; tweak it, then `:wq` commits, `:q!` cancels |
-| `,gm` | in a commit message: have Claude write a new one |
+| `,gm` | in a commit message or pull request: have Claude write a new one |
 | `,gh` / `,gH` | history of this file / of the repo, each commit side by side |
 | `,go` | show the changes inline, with the old text |
 | `,gs` / `,gd` / `,gb` | git status / changed hunks / branches |
@@ -97,11 +97,12 @@ Clippy runs on save. Python uses the project's `.venv` automatically.
 | `,gB` | open this file on GitHub |
 | `:Git …` | any git command, output in a split |
 | `,gp` / `,gP` | GitHub pull requests: open / all |
+| `,gr` | pull request from this branch into the default branch: it opens in a tab like a commit message, Claude drafts it (first line is the title), and the comments under it say where it's going and warn about anything off (uncommitted changes, a push that would be refused). `:wq` pushes the branch and creates it; empty or `:q!` cancels. If it fails, `,gr` again brings your text back |
 | `,gi` / `,gI` | GitHub issues: open / all |
 
 Reviewing a lot of AI-written changes: open `,gv`, go file by file, and stage each file (`-`) or change once you're happy with it. For a single change, use `ghgh` in the right-hand pane of an unstaged file: that pane is the real file, while the left-hand pane and staged files are read-only copies where `ghgh` doesn't work. Whatever's still unstaged is what's left to read, and anything the agent changes afterwards shows up unstaged again. Commit with `,gc` (or `cc` in the file list) when you're done; Claude drafts the message for you to tweak.
 
-AI commit messages only happen in repos whose `origin` is on one of your GitHub accounts (`OWNERS` at the top of `lua/cat/commitmsg.lua`), so work code is never sent. To allow another repo: `git config cat.aicommit true`; to turn it off in one: `git config cat.aicommit false`. Each message uses Claude Haiku with no tools, and costs about as many tokens as the diff (big diffs are cut to about 4k tokens).
+AI commit messages and pull requests only happen in repos whose `origin` is on one of your GitHub accounts (`OWNERS` at the top of `lua/cat/commitmsg.lua`), so work code is never sent. To allow another repo: `git config cat.aicommit true`; to turn it off in one: `git config cat.aicommit false`. Each message uses Claude Haiku with no tools, and costs about as many tokens as the diff (big diffs are cut to about 4k tokens).
 
 On a PR or issue, Enter shows the actions: view the diff, comment, review (approve or request changes), check out the branch, merge, open in the browser. It uses your `gh` login.
 

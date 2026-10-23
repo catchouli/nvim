@@ -11,7 +11,7 @@ I made this Neovim config with Claude because I needed one tool where I could wr
 
 - **Claude, built in.** Claude Code runs in a split next to your code (`,ac`). It sees the file you're in and what you've selected, and its edits arrive as diffs to accept or reject. `Ctrl-h` / `Ctrl-l` hop between it and your code.
 - **A review screen for everything that's changed.** `,gv` lists every changed file with its diff side by side, for your uncommitted work or for past commits and branches. Stage each file as you read it, and whatever's still unstaged is what's left to review. Handy when an agent has just changed twenty files.
-- **Commit messages written by Claude.** Commit straight from the review (`cc`, or `,gc` anywhere) and Claude drafts the message from the staged diff in a couple of seconds; tweak it and `:wq`. It only does this in your own repos, so work code is never sent anywhere.
+- **Commit messages written by Claude.** Commit straight from the review (`cc`, or `,gc` anywhere) and Claude drafts the message from the staged diff in a couple of seconds; tweak it and `:wq`. `,gr` does the same for a pull request: Claude drafts it from the branch, `:wq` pushes and opens it. It only does this in your own repos, so work code is never sent anywhere.
 
 Underneath, it's an everyday editor for Rust and Python (plus C++/CUDA, GLSL and Lua), built on my old vimrc's habits: `,` as leader, CtrlP on `<C-p>`, EasyMotion on `,,`, Enter clears the search highlight, `gl`/`gs` for `cargo run`/`cargo test`, Esc leaves the terminal. Every key is in the [cheat sheet](CHEATSHEET.md), and pressing `,` and waiting shows what comes next.
 
