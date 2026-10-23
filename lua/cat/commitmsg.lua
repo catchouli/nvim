@@ -54,6 +54,55 @@ local function prompt(gitdir)
   return ('Recent commit subjects:\n%s\nFiles changed:\n%s\nStaged diff:\n%s'):format(log, stat, diff)
 end
 
+M.allowed = allowed -- also used for pull requests (pullrequest.lua)
+
+-- Asks Claude Haiku for text (`system` prompt, `input` on stdin) and puts it at the top
+-- of `buf`, above the first line matching `stop` (where git's comments start). `force`
+-- replaces what's there; otherwise it only goes in if the first line is untouched.
+-- `what` names it in warnings ("commit message"). Also used for pull requests.
+function M.fill(buf, system, input, force, stop, what)
+  local claude = vim.fn.exepath('claude')
+  if claude == '' then
+    if force then vim.notify('No AI ' .. what .. ': claude is not on the PATH', vim.log.levels.WARN) end
+    return
+  end
+
+  vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+  local mark = vim.api.nvim_buf_set_extmark(buf, ns, 0, 0, {
+    virt_text = { { 'Claude is writing a ' .. what .. '…', 'Comment' } }, virt_text_pos = 'eol',
+  })
+  local before = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1]
+  vim.system({
+    claude, '-p', '--model', 'haiku', '--tools', '', '--strict-mcp-config', '--setting-sources', '',
+    '--no-session-persistence', '--disable-slash-commands', '--system-prompt', system,
+    -- Run outside the repo: while git commit waits for the message it holds the repo's
+    -- lock, and Claude Code's own git checks at startup would wait on it.
+  }, { stdin = input, text = true, timeout = 30000, cwd = vim.fn.stdpath('cache') }, vim.schedule_wrap(function(r)
+    if not vim.api.nvim_buf_is_valid(buf) then return end
+    pcall(vim.api.nvim_buf_del_extmark, buf, ns, mark)
+    local msg = vim.trim(r.stdout or '')
+    if r.code ~= 0 or msg == '' then
+      vim.notify('No AI ' .. what .. ': ' .. vim.trim(r.stderr or 'claude failed'), vim.log.levels.WARN)
+      return
+    end
+    -- Typed something meanwhile? Keep it. (Compares the text: the change counter moves
+    -- on its own while the commit buffer is being set up.)
+    if vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] ~= before then return end
+    local lines = vim.split((msg:gsub('^```%w*\n', ''):gsub('\n```$', '')), '\n')
+    if force then
+      -- Replace the old text, keeping the comment lines below it.
+      local all = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+      local first_comment = #all
+      for i, l in ipairs(all) do
+        if l:match(stop) then first_comment = i - 1; break end
+      end
+      vim.api.nvim_buf_set_lines(buf, 0, first_comment, false, vim.list_extend(lines, { '' }))
+    else
+      vim.api.nvim_buf_set_lines(buf, 0, 1, false, lines)
+    end
+  end))
+end
+
 -- Fills buffer `buf` (a COMMIT_EDITMSG) with a message. `force` replaces what's there.
 function M.write(buf, force)
   buf = (buf == nil or buf == 0) and vim.api.nvim_get_current_buf() or buf
@@ -67,51 +116,12 @@ function M.write(buf, force)
   if not force and vim.trim(vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] or '') ~= '' then
     return -- already has a message (amend, merge, -m ...)
   end
-  local claude = vim.fn.exepath('claude')
-  if claude == '' then
-    if force then vim.notify('No AI commit message: claude is not on the PATH', vim.log.levels.WARN) end
-    return
-  end
   local input = prompt(gitdir)
   if not input then
     if force then vim.notify('Nothing is staged', vim.log.levels.WARN) end
     return
   end
-
-  vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
-  local mark = vim.api.nvim_buf_set_extmark(buf, ns, 0, 0, {
-    virt_text = { { 'Claude is writing a message…', 'Comment' } }, virt_text_pos = 'eol',
-  })
-  local before = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1]
-  vim.system({
-    claude, '-p', '--model', 'haiku', '--tools', '', '--strict-mcp-config', '--setting-sources', '',
-    '--no-session-persistence', '--disable-slash-commands', '--system-prompt', SYSTEM,
-    -- Run outside the repo: while git commit waits for the message it holds the repo's
-  -- lock, and Claude Code's own git checks at startup would wait on it.
-}, { stdin = input, text = true, timeout = 30000, cwd = vim.fn.stdpath('cache') }, vim.schedule_wrap(function(r)
-    if not vim.api.nvim_buf_is_valid(buf) then return end
-    pcall(vim.api.nvim_buf_del_extmark, buf, ns, mark)
-    local msg = vim.trim(r.stdout or '')
-    if r.code ~= 0 or msg == '' then
-      vim.notify('No AI commit message: ' .. vim.trim(r.stderr or 'claude failed'), vim.log.levels.WARN)
-      return
-    end
-    -- Typed something meanwhile? Keep it. (Compares the text: the change counter moves
-    -- on its own while the commit buffer is being set up.)
-    if vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] ~= before then return end
-    local lines = vim.split((msg:gsub('^```%w*\n', ''):gsub('\n```$', '')), '\n')
-    if force then
-      -- Replace the old message, keeping git's comment lines below it.
-      local all = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-      local first_comment = #all
-      for i, l in ipairs(all) do
-        if l:match('^#') then first_comment = i - 1; break end
-      end
-      vim.api.nvim_buf_set_lines(buf, 0, first_comment, false, vim.list_extend(lines, { '' }))
-    else
-      vim.api.nvim_buf_set_lines(buf, 0, 1, false, lines)
-    end
-  end))
+  M.fill(buf, SYSTEM, input, force, '^#', 'commit message')
 end
 
 function M.setup()

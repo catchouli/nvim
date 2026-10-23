@@ -195,6 +195,8 @@ map('n', '<leader>gH', '<Cmd>DiffviewFileHistory<CR>', { desc = 'History of the 
 -- comment, review (approve / request changes), checkout, merge, open in browser.
 map('n', '<leader>gp', P('gh_pr'), { desc = 'GitHub pull requests (open)' })
 map('n', '<leader>gP', P('gh_pr', { state = 'all' }), { desc = 'GitHub pull requests (all)' })
+-- Push this branch and open a pull request into the default branch (Claude drafts it).
+map('n', '<leader>gr', function() require('cat.pullrequest').open() end, { desc = 'Create a pull request' })
 map('n', '<leader>gi', P('gh_issue'), { desc = 'GitHub issues (open)' })
 map('n', '<leader>gI', P('gh_issue', { state = 'all' }), { desc = 'GitHub issues (all)' })
 
